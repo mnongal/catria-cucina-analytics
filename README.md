@@ -1,169 +1,179 @@
-# Restaurant Revenue & Operations Analytics
+# Catria & Cucina — Restaurant Analytics
 
-**A SQL + Python portfolio case study using six months of reproducible, synthetic restaurant transactions.**
+An interactive restaurant analytics dashboard and reproducible SQL/Python analysis of revenue, menu performance, and service demand.
 
-Catria & Cucina is a fictional single-location restaurant. This project asks where sales and ingredient contribution come from, when service demand is highest, and what managers should investigate before changing promotions or staffing.
+The project models **six months of transactions at a fictional restaurant**, connecting order-level operations with item-level sales and ingredient costs. It includes a browser dashboard, a relational MySQL schema, 13 business analyses, and dashboard-ready datasets.
 
-**Scope:** January 1–June 30, 2026 · USD · 15,102 recorded orders · 74,590 item lines · 22 menu items · 12 fictional staff identifiers.
+**MySQL · Python · Pandas · JavaScript · GitHub Pages**
 
 ![Restaurant revenue and operations dashboard](reports/figures/dashboard.png)
 
-## Interactive website
+## Overview
 
-Explore the project as a browser dashboard with month, channel and category filters, searchable menu performance, weekday/hour demand, business findings and CSV exports. The complete website is included in `dist/`, along with a GitHub Actions workflow that publishes it to GitHub Pages.
+The analysis addresses four operational questions:
 
-**[Publish the live dashboard →](docs/WEBSITE.md)**
+- How do revenue and average check value change over time?
+- Which menu items generate the most sales and ingredient contribution?
+- When is service demand highest?
+- How do discounted checks and dining channels compare?
 
-No MySQL server or Python installation is needed for visitors. The site computes metrics in the browser from the included synthetic dataset. A public deployment URL will be available after uploading this repository and enabling GitHub Pages; no public deployment has been performed as part of this package.
+All records are **synthetic**, generated with a fixed seed. Findings describe the modeled dataset, not the performance of a real restaurant.
 
-## Results at a glance
+## Interactive dashboard
 
-| KPI | Result | Definition |
-|---|---:|---|
-| Completed orders | 14,860 | Excludes 242 cancelled checks |
-| Gross sales | $1,153,276.75 | Completed line quantity × historical unit price |
-| Discounts | $26,983.93 | Rounded per line, then summed |
-| Net sales | $1,126,292.82 | Gross sales less discounts |
-| Average order value | $75.79 | Net sales / completed checks |
-| Ingredient contribution | $744,310.49 | Net sales less modeled ingredient cost |
-| Contribution margin | 66.08% | Contribution / net sales; weighted ratio |
-| Cancellation rate | 1.60% | Cancelled / all recorded checks |
-| Dine-in sales per cover | $28.52 | Dine-in net sales / seated guests |
+The website includes:
 
-Contribution is **not operating profit**: labor, rent, waste, utilities, fees, tax and tips are outside this dataset.
+- Revenue, completed-check, average-spend, and contribution-margin metrics.
+- Filters for month, dining channel, and menu category.
+- Sales trends, revenue mix, and bestselling items.
+- Searchable menu rankings by sales, volume, contribution, or margin.
+- Weekday/hour demand and service-time comparisons.
+- Business findings, metric definitions, and downloadable data and SQL.
+- CSV exports of the current filtered summary.
 
-## Business findings and recommendations
+The dashboard runs in the browser using the included dataset. Visitors do not need Python, MySQL, or an account. Category selections calculate item sales and distinct checks containing those items; cancellation rates use period and channel only.
 
-1. **Daily sales rose across the modeled period.** Net sales per calendar day increased from $5,202 in January to $7,271 in June (39.8%). February's total sales fell 4.7%, but sales per day rose 5.5%. Compare per-day metrics before treating a shorter month as weak demand. The generator explicitly introduces demand growth and an April price increase, so this does not establish a real business trend or a causal price effect. Source: Q02 and `monthly_kpis.csv`.
-2. **Saturday needs the most service capacity.** There were 121.3 completed checks per Saturday versus 57.9 per Monday. Friday/Saturday at 18:00–19:59 averaged 27.3 minutes to service, versus 19.3 across other times. Trial extra peak coverage and track service time with labor cost and customer feedback; the data cannot determine a staffing headcount. Source: Q05–Q06, `weekday_performance.csv`, and `order_metrics.csv`.
-3. **Margherita Pizza leads item revenue.** It generated $160,948.30 in net sales. Maintain availability and review prep capacity for high-volume mains. Beverages had a 74.9% ingredient contribution margin versus 63.9% for mains; test relevant beverage suggestions while tracking contribution per check and customer response. Source: Q03–Q04, `menu_performance.csv`, and `category_performance.csv`.
-4. **Discounted checks have lower observed economics.** Discounted AOV was $67.51 versus $77.84 at full price; contribution margins were 62.45% and 66.87%. Promotions occur more often on quieter weekdays. A controlled promotion test, or careful adjustment for timing and basket mix, is needed before estimating incremental demand. Do not call the $26,983.93 discount total recoverable profit. Source: Q08 and `discount_performance.csv`.
+[Website setup and deployment](docs/WEBSITE.md) · [Metric definitions and assumptions](docs/METHODOLOGY.md)
 
-Recommendations are proposed tests, not implemented changes or measured business impact. Detailed assumptions are in [Methodology](docs/METHODOLOGY.md).
+## Dataset
 
-## Start here
+| Coverage | Details |
+|---|---|
+| Reporting period | January 1–June 30, 2026 |
+| Location and currency | One fictional restaurant · USD |
+| Recorded orders | 15,102 |
+| Order-item lines | 74,590 |
+| Menu items | 22 |
+| Staff identifiers | 12 anonymous, fictional identifiers |
 
-You can review the project without installing anything: read this page, open the dashboard PNG, and browse the CSVs and [finished SQL](sql/04_analysis.sql).
+The source data include completed and cancelled checks, dine-in and takeaway channels, discounts, service times, and historical price and ingredient-cost snapshots.
 
-To reproduce locally, use **Python 3.11 or newer** from the repository root:
+## Key results
 
-```bash
-python -m venv .venv
-# Activate the environment (see docs/SETUP.md for your operating system).
-python -m pip install -r requirements.txt
-python scripts/analyze.py
-python -m unittest discover -s tests -v
-```
+| Metric | Result |
+|---|---:|
+| Completed orders | 14,860 |
+| Gross sales | $1,153,276.75 |
+| Discounts | $26,983.93 |
+| Net sales | $1,126,292.82 |
+| Average order value | $75.79 |
+| Ingredient contribution | $744,310.49 |
+| Ingredient contribution margin | 66.08% |
+| Cancellation rate | 1.60% |
 
-The raw dataset is included. `python scripts/generate_data.py` recreates it with seed `20260101`; rerun `analyze.py` afterward. Generation replaces the four raw CSVs and their manifest. Analysis replaces derived CSVs, the KPI JSON and dashboard. [Full setup and MySQL import instructions](docs/SETUP.md).
+**Ingredient contribution = net sales − modeled ingredient cost.** It excludes labor, rent, waste, fees, and other operating expenses, so it is not operating profit. Sales exclude cancelled checks, tax, and tips.
 
-## Relational model
+## Findings and proposed actions
+
+| Finding | Business implication | Evidence |
+|---|---|---|
+| February net sales fell 4.7%, but sales per day increased 5.5%. | Compare revenue per operating day alongside monthly totals. | [Monthly KPIs](data/processed/monthly_kpis.csv) · SQL Q02 |
+| Saturday averaged 121.3 completed checks, compared with 57.9 on Monday. | Evaluate additional peak-period coverage using service times and labor costs. | [Weekday demand](data/processed/weekday_performance.csv) · SQL Q05–Q06 |
+| Margherita Pizza led item net sales at $160,948.30. | Prioritize availability and review preparation capacity for high-volume items. | [Menu performance](data/processed/menu_performance.csv) · SQL Q03 |
+| Beverage contribution margin was 74.9%, compared with 63.9% for mains. | Test relevant beverage suggestions and measure contribution per check. | [Category performance](data/processed/category_performance.csv) · SQL Q04 |
+| Discounted checks averaged $67.51, versus $77.84 at full price. | Use a controlled promotion test before estimating incremental demand. | [Discount performance](data/processed/discount_performance.csv) · SQL Q08 |
+
+These are descriptive findings and proposed tests. Demand growth, price changes, and service-time patterns are explicit generation assumptions. No intervention outcomes or business improvements were measured.
+
+## Data model
 
 ```mermaid
 erDiagram
     servers ||--o{ orders : handles
     orders ||--|{ order_items : contains
     menu_items ||--o{ order_items : identifies
-    servers {
-        int server_id PK
-        string server_name
-    }
-    orders {
-        int order_id PK
-        date order_date
-        time order_time
-        int server_id FK
-        string channel
-        string status
-        int discount_percent
-    }
-    order_items {
-        int order_item_id PK
-        int order_id FK
-        int item_id FK
-        int quantity
-        decimal unit_price
-        decimal unit_cost
-    }
-    menu_items {
-        int item_id PK
-        string item_name
-        string category
-        decimal selling_price
-        decimal unit_cost
-    }
 ```
 
-`orders` has one row per check; `order_items` has one row per distinct item within a check, with a quantity. The menu dimension holds end-of-period reference prices. Financial calculations use snapshots on `order_items`. Views first calculate completed line financials, then aggregate to one row per order to avoid duplicating order counts and service times. [Complete data dictionary](docs/DATA_DICTIONARY.md).
-
-## Analysis coverage
-
-| SQL question | Business question | Matching Python output |
+| Table | Grain | Key relationships |
 |---|---|---|
-| Q01 | Sales, discounts, AOV and ingredient contribution | `kpis.json` |
-| Q02 | Monthly growth and sales per calendar day | `monthly_kpis.csv` |
-| Q03 | Menu revenue, volume and contribution | `menu_performance.csv` |
-| Q04 | Weighted category margins | `category_performance.csv` |
-| Q05 | Weekday demand per operating day | `weekday_performance.csv` |
-| Q06 | Hourly demand and service times | `hourly_demand.csv` |
-| Q07 | Server volume and active-day comparisons | `server_performance.csv` |
-| Q08 | Discounted versus full-price checks | `discount_performance.csv` |
-| Q09 | Dine-in versus takeaway | `channel_performance.csv` |
-| Q10 | Cancellation rate by channel | `cancellations.csv` |
-| Q11 | Daily sales and trailing seven-day sales | `daily_kpis.csv` |
-| Q12 | Beverage attachment rate | `kpis.json` |
-| Q13 | Guest spend and check duration | `kpis.json` |
+| `orders` | One recorded check | Primary key `order_id`; staff reference `server_id` |
+| `order_items` | One distinct menu item within a check | Primary key `order_item_id`; references `order_id` and `item_id` |
+| `menu_items` | One menu item | Primary key `item_id` |
+| `servers` | One fictional staff member | Primary key `server_id` |
 
-## Repository layout
+Financial calculations use transaction-level price and cost snapshots, preserving historical values when menu prices change. SQL views aggregate item lines to check level before calculating order-level metrics, preventing duplicate counts and basket-weighted service averages.
+
+[Full data dictionary](docs/DATA_DICTIONARY.md) · [MySQL schema](sql/01_schema.sql)
+
+## SQL analysis
+
+The [analysis script](sql/04_analysis.sql) answers 13 business questions using joins, CTEs, conditional aggregation, calendar tables, and window functions:
+
+| Area | Analyses |
+|---|---|
+| Revenue | Overall KPIs, monthly growth, sales per day, trailing seven-day sales |
+| Menu | Item performance, category margins, beverage attachment |
+| Operations | Weekday/hour demand, service times, staff check volumes |
+| Check economics | Discounts, dining channels, cancellations, guest spend |
+
+Matching Pandas outputs are available in [`data/processed`](data/processed).
+
+## Run locally
+
+### Website preview
+
+From the repository root, run:
+
+```bash
+python -m http.server 8765 --bind 127.0.0.1 --directory dist
+```
+
+Open `http://127.0.0.1:8765/` in a browser. The website data are already included. To rebuild them from the raw CSVs, run `python scripts/build_web_data.py` before starting the preview.
+
+### Python analysis
+
+Use Python 3.11 or newer:
+
+```bash
+python -m venv .venv
+# Activate the environment using the instructions in docs/SETUP.md.
+python -m pip install -r requirements.txt
+python scripts/analyze.py
+python -m unittest discover -s tests -v
+```
+
+Optional: `python scripts/generate_data.py` regenerates the source CSVs with seed `20260101`. Rerun the analysis afterward to refresh derived outputs.
+
+### MySQL
+
+Run the schema, import, views, quality checks, and analysis scripts in the order documented in [Setup](docs/SETUP.md). The project targets MySQL 8.4 and supports MySQL 8.0.16+.
+
+### GitHub Pages
+
+The included workflow builds the website data, verifies dashboard calculations, and deploys `dist/` when changes are pushed to `main`. Enable **Settings → Pages → GitHub Actions** in the repository. See [Deployment instructions](docs/WEBSITE.md) for first-time setup.
+
+## Repository structure
 
 ```text
-restaurant-revenue-analytics/
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── requirements-mysql.txt
+├── .github/workflows/       # GitHub Pages deployment
 ├── data/
-│   ├── raw/                 # Four CSV tables + generation manifest
-│   └── processed/           # BI-ready facts, summaries and KPI JSON
-├── sql/                     # Schema → import → views → analysis → checks
-├── scripts/                 # Generator, Pandas analysis, dashboard, MySQL verifier
-├── tests/                   # Data-contract, rounding and reconciliation tests
-├── dist/                    # Interactive website and generated browser data
-├── .github/workflows/       # Checks and automatic GitHub Pages publishing
-├── reports/
-│   ├── figures/dashboard.png
-│   └── validation.json
-└── docs/                    # Setup, dictionary, assumptions, BI guide, interview prep
+│   ├── raw/                 # Source CSV tables and generation manifest
+│   └── processed/           # Analysis facts, summaries, and KPIs
+├── dist/                    # Interactive website and browser dataset
+├── docs/                    # Setup, data dictionary, methodology, and deployment
+├── reports/                 # Dashboard image and validation evidence
+├── scripts/                 # Data generation, analysis, and verification
+├── sql/                     # Schema, imports, views, analysis, and quality checks
+├── tests/                   # Python and website calculation checks
+├── requirements.txt
+└── README.md
 ```
 
-## Validation and limitations
+## Validation
 
-The Python pipeline was executed on the delivered CSVs. It checks keys, relationships, date coverage, status rules, table capacity, overlapping seated checks, and financial reconciliation. The test suite uses a separate SQLite aggregation to cross-check financial totals. See [validation evidence](reports/validation.json) and [test results](reports/test_results.txt).
+- Seven Python tests passed, covering data contracts, invalid relationships, cancellation handling, rounding, independent financial reconciliation, and reproducible CSV generation.
+- Website checks reconcile the headline KPIs to Pandas outputs and test combined filters, calendar denominators, empty states, and CSV export content.
+- Desktop and phone layouts were reviewed, including filtering, menu search, sorting, and navigation.
+- Native MySQL execution remains unverified. `scripts/verify_mysql.py` compares all 13 SQL analysis results against the Python outputs after the database is set up.
 
-**MySQL runtime validation is pending.** No MySQL server was available in the build environment. The MySQL scripts were reviewed against MySQL documentation; SQLite tests do not validate MySQL syntax or import behavior. After setup, `python scripts/verify_mysql.py` checks imported row counts and compares all 13 MySQL analysis results to the Python outputs. A successful run writes `reports/mysql_validation.json`.
+[Python validation](reports/validation.json) · [Test results](reports/test_results.txt) · [Website validation and limitations](reports/web_validation.json)
 
-The data are generated and contain designed patterns rather than evidence from a real restaurant. There are no customer IDs, labor shifts, inventory receipts, refunds after payment, or measured intervention outcomes. Staff activity cannot be used as an individual productivity or fairness ranking.
+## Scope and limitations
 
-## Interview talking points
+The dataset does not include customer history, staffing hours, inventory receipts, or post-payment refunds. Discount comparisons are descriptive rather than causal. Staff sales totals do not measure productivity without exposure and workload information.
 
-- **Grain:** Why summing an order-level value after a one-to-many join can overstate results.
-- **Metric contract:** Completed checks, line-level rounding, historical price snapshots and weighted margins.
-- **SQL skills:** Joins, CTEs, views, conditional aggregation, recursive calendars and window functions.
-- **Validation:** Foreign keys, uniqueness, operational consistency and independent reconciliation.
-- **Business judgment:** A shorter month, promotion selection bias, and the difference between contribution and profit.
+This project was developed with AI assistance. Its synthetic data, calculation rules, and validation status are documented for reproducibility.
 
-Use [Interview preparation](docs/INTERVIEW_PREP.md) to learn and explain the code before making first-person skill or ownership claims. This project was assembled with AI assistance; describe your own review, modifications and understanding accurately.
+## License
 
-## Dashboard and publishing
-
-The included PNG is a finished static dashboard, not a Power BI or Tableau screenshot. Import the processed facts or summary CSVs into a BI tool using [Dashboard guide](docs/DASHBOARD_GUIDE.md). Upload the **contents of this folder** to a GitHub repository so this README appears on its front page; see [Publishing guide](docs/PUBLISHING.md).
-
-For the interactive browser version, follow [Website publishing](docs/WEBSITE.md). GitHub Actions rebuilds the website data, checks its calculations, and publishes only the `dist/` folder to Pages.
-
-## Technical references
-
-- [MySQL: loading data](https://dev.mysql.com/doc/refman/8.4/en/loading-tables.html)
-- [MySQL: LOCAL data loading controls](https://dev.mysql.com/doc/refman/8.4/en/load-data-local-security.html)
-- [MySQL: window functions](https://dev.mysql.com/doc/refman/8.4/en/window-functions.html)
-
-All transaction data are generated by the included script. No third-party restaurant dataset or personal information is used. Code, documentation and synthetic data are provided under the [MIT License](LICENSE).
+Code, documentation, and synthetic data are available under the [MIT License](LICENSE).
