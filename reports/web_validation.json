@@ -1,0 +1,14 @@
+{
+  "calculation_checks": "PASS: all-period KPIs match Pandas; selected months/categories; raw CSV reconciliation of April/takeaway/dessert; calendar denominators; empty and invalid filters.",
+  "export_content": "PASS: CSV totals, selected-filter metadata and quoting tested in Node.",
+  "ui_checks": "PASS: browser preview, combined filters, menu search, search empty state, sorting, reset, navigation, project-file dialog.",
+  "responsive_checks": "Desktop 1440px and phone 390px layouts visually inspected; no page-level horizontal overflow at phone width. Tables scroll within their panels.",
+  "browser_agent_tools": "Both tools registered; valid filters produced expected metrics; invalid input rejected and state unchanged.",
+  "static_checks": "PASS: JavaScript syntax, unique HTML IDs, local page assets, Markdown links, download ZIP integrity; all website resources returned HTTP 200.",
+  "console_errors": "None observed in preview.",
+  "limitations": [
+    "Native GitHub Actions and Pages deployment not run: repository has not yet been created.",
+    "The embedded preview did not expose a download event for the generated CSV; CSV content is tested, but the saved browser download was not verified.",
+    "Native MySQL execution remains pending as documented in the original project."
+  ]
+}

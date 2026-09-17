@@ -1,0 +1,19 @@
+Executed: python -m unittest discover -s tests -v
+Environment: Python 3.12.14, pandas 3.0.1, NumPy 2.3.5
+
+test_cancelled_order_economics_excluded ... ok
+test_data_contract ... ok
+test_duplicate_dimension_rejected ... ok
+test_independent_decimal_and_sql_reconciliation ... ok
+test_missing_parent_rejected ... ok
+test_round_half_up_and_snapshot_price ... ok
+test_seed_reproduces_delivered_csv_bytes ... ok
+
+Ran 7 tests in 13.633s
+OK
+
+The independent reconciliation uses Python Decimal and SQLite to aggregate
+raw data separately from the Pandas calculation. Seed reproduction compared
+the bytes of all four regenerated raw CSVs to the delivered CSVs.
+These tests do not establish native MySQL execution. Run the supplied
+scripts/verify_mysql.py against a populated MySQL instance for that check.

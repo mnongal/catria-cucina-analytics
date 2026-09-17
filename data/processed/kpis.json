@@ -1,0 +1,18 @@
+{
+  "recorded_orders": 15102,
+  "completed_orders": 14860,
+  "cancelled_orders": 242,
+  "gross_sales": 1153276.75,
+  "discount_amount": 26983.93,
+  "net_sales": 1126292.82,
+  "ingredient_cost": 381982.33,
+  "contribution_amount": 744310.49,
+  "aov": 75.79359488559892,
+  "contribution_margin_pct": 66.08498933696478,
+  "cancellation_rate_pct": 1.6024367633426035,
+  "beverage_attachment_pct": 89.7913862718708,
+  "avg_service_minutes": 20.43014804845222,
+  "dine_in_covers": 29691,
+  "dine_in_sales_per_cover": 28.52266579098043,
+  "dine_in_avg_check_duration_minutes": 66.70754369825207
+}

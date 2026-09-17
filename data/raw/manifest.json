@@ -1,0 +1,12 @@
+{
+  "seed": 20260101,
+  "start": "2026-01-01",
+  "end": "2026-06-30",
+  "source": "synthetic; generated locally",
+  "row_counts": {
+    "servers": 12,
+    "menu_items": 22,
+    "orders": 15102,
+    "order_items": 74590
+  }
+}

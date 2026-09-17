@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "check": "orders primary key",
+      "result": "PASS"
+    },
+    {
+      "check": "order_items primary key",
+      "result": "PASS"
+    },
+    {
+      "check": "menu_items primary key",
+      "result": "PASS"
+    },
+    {
+      "check": "servers primary key",
+      "result": "PASS"
+    },
+    {
+      "check": "line order foreign key",
+      "result": "PASS"
+    },
+    {
+      "check": "line menu foreign key",
+      "result": "PASS"
+    },
+    {
+      "check": "order server foreign key",
+      "result": "PASS"
+    },
+    {
+      "check": "every order has lines",
+      "result": "PASS"
+    },
+    {
+      "check": "unique order and item pair",
+      "result": "PASS"
+    },
+    {
+      "check": "valid quantity",
+      "result": "PASS"
+    },
+    {
+      "check": "valid snapshot amounts",
+      "result": "PASS"
+    },
+    {
+      "check": "valid discounts",
+      "result": "PASS"
+    },
+    {
+      "check": "valid status",
+      "result": "PASS"
+    },
+    {
+      "check": "valid channel",
+      "result": "PASS"
+    },
+    {
+      "check": "valid payment method",
+      "result": "PASS"
+    },
+    {
+      "check": "date coverage",
+      "result": "PASS"
+    },
+    {
+      "check": "opening hours",
+      "result": "PASS"
+    },
+    {
+      "check": "dine-in fields",
+      "result": "PASS"
+    },
+    {
+      "check": "takeaway nulls",
+      "result": "PASS"
+    },
+    {
+      "check": "completed timings",
+      "result": "PASS"
+    },
+    {
+      "check": "cancelled timings",
+      "result": "PASS"
+    },
+    {
+      "check": "no overlapping table occupancy",
+      "result": "PASS"
+    },
+    {
+      "check": "table capacity",
+      "result": "PASS"
+    },
+    {
+      "check": "line to order revenue reconciliation",
+      "result": "PASS"
+    },
+    {
+      "check": "gross minus discounts equals net",
+      "result": "PASS"
+    },
+    {
+      "check": "monthly and menu totals reconcile",
+      "result": "PASS"
+    }
+  ],
+  "python": "3.12.14",
+  "pandas": "3.0.1",
+  "numpy": "2.3.5",
+  "mysql_execution": "Not executed in build environment; run scripts/verify_mysql.py against MySQL 8.4."
+}

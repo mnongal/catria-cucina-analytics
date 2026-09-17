@@ -1,0 +1,23 @@
+item_id,item_name,category,selling_price,unit_cost
+101,Margherita Pizza,Main,19.00,5.72
+102,Truffle Pasta,Main,25.25,9.36
+103,Classic Burger,Main,17.75,6.24
+104,Grilled Salmon,Main,29.50,12.48
+105,Chicken Bowl,Main,20.00,6.76
+106,Mushroom Risotto,Main,23.00,7.80
+107,Steak Frites,Main,33.50,15.08
+108,Veggie Flatbread,Main,17.25,5.20
+201,Garden Salad,Starter,9.00,2.60
+202,Garlic Bread,Starter,6.75,1.56
+203,Tomato Soup,Starter,8.00,2.08
+204,Crispy Calamari,Starter,12.50,4.99
+301,Lemonade,Beverage,5.25,0.94
+302,Iced Tea,Beverage,4.25,0.62
+303,House Wine,Beverage,10.00,3.12
+304,Craft Beer,Beverage,8.00,2.60
+305,Sparkling Water,Beverage,4.75,1.04
+306,Espresso,Beverage,3.75,0.57
+401,Chocolate Brownie,Dessert,8.50,2.29
+402,Tiramisu,Dessert,9.50,3.12
+403,Vanilla Gelato,Dessert,6.25,1.66
+404,Lemon Tart,Dessert,9.00,2.70
