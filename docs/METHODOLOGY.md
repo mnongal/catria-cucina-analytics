@@ -2,7 +2,7 @@
 
 ## Provenance
 
-All data are synthetic, generated using NumPy's seeded random generator (`20260101`). Names and operating assumptions are fictional. The data are not scraped, sampled from a private business, or calibrated to a restaurant benchmark. This is a completed practice case, not client work. It was assembled with AI assistance; users should accurately describe their own subsequent work.
+All data are synthetic, generated using NumPy's seeded random generator (`20260101`). Names and operating assumptions are fictional. The data are not scraped, sampled from a private business, or calibrated to a restaurant benchmark. This synthetic case study was developed with AI assistance.
 
 ## Operating assumptions
 

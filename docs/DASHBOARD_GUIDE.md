@@ -1,30 +1,53 @@
-# Build on the included dashboard
+# Dashboard metrics and filter behavior
 
-`reports/figures/dashboard.png` is a finished static dashboard generated from the Python results. It can be used directly in the README or a portfolio presentation. It is not an interactive BI application or evidence of using Power BI/Tableau.
+The project includes an interactive web dashboard and a static overview image at `reports/figures/dashboard.png`. Both use the same financial definitions. The static image summarizes the full period; the website recalculates metrics for the selected filters.
 
-## Option A: Build quickly with summaries
+## KPI definitions
 
-Import `monthly_kpis.csv`, `menu_performance.csv`, `weekday_performance.csv` and `category_performance.csv` as separate summary tables. Use each table for its corresponding chart, as shown in the PNG. Do not join summaries to one another or add their totals together: they are different aggregations of the same sales.
+| Metric | Definition | Population |
+|---|---|---|
+| Net sales | Historical line gross sales minus rounded line discounts | Matching completed item lines |
+| Completed checks | Distinct order IDs | Completed checks containing matching items |
+| Average check | Net sales divided by completed checks | Entire menu selected |
+| Category spend per check | Selected-category net sales divided by matching checks | A category selected |
+| Ingredient contribution | Net sales minus historical ingredient costs | Matching completed item lines |
+| Contribution margin | Total contribution divided by total net sales | Matching completed item lines |
+| Average service time | Mean service time at check grain | Matching completed checks |
+| Cancellation rate | Cancelled checks divided by all recorded checks | Selected month and channel; category ignored |
 
-Use separate cards populated from `kpis.json`, or calculate cards from monthly totals. Net sales is SUM(net_sales), completed checks is SUM(orders), AOV is SUM(net_sales)/SUM(orders), and margin is SUM(contribution_amount)/SUM(net_sales). Do not average monthly AOV or margin for a full-period card.
+Ingredient contribution excludes labor, rent, waste, and other operating expenses. It is not operating profit.
 
-Suggested charts: monthly net sales columns; top-five item sales horizontal bars; completed checks per operating weekday; weighted category contribution margin. Keep USD units visible and make synthetic provenance visible.
+## Filters and aggregation
 
-## Option B: Add consistent filters with facts
+- **Month:** All six months or one month in January–June 2026. The sales chart switches between monthly and daily totals.
+- **Dining channel:** All channels, dine-in, or takeaway.
+- **Menu category:** Entire menu, mains, starters, beverages, or desserts.
 
-Use `order_metrics.csv` as your completed-check fact and `line_metrics.csv` as the completed-item fact. Create a date dimension and a menu dimension from raw `menu_items.csv`. Relate date → orders (one-to-many), orders → lines on order_id (one-to-many), and menu → lines on item_id (one-to-many), using single-direction filtering. Server and channel filters should apply at order level. Avoid a second active date → lines path that would create ambiguity.
+A category filter limits sales to matching lines. Order counts remain distinct check counts, and average spend becomes category spend per matching check. Service time is averaged once per matching check, avoiding extra weight for large baskets.
 
-Calculate sales from `net_cents / 100` and contribution from `contribution_cents / 100`. Order counts at line grain must use DISTINCTCOUNT(order_id); averaging service_minutes from lines weights multi-line checks too heavily. An item filter affects line-level sales and distinct checks containing those items. It does not automatically filter order-level cards through a single-direction relationship; keep such cards labeled for all checks or implement a deliberate measure using the filtered order ID set.
+The menu search and sort controls operate on the displayed item table. They do not change the headline metrics or summary export. Written findings always refer to the full dataset and are labeled accordingly.
 
-For cancellation visuals, use raw orders as a **separate fact** because completed facts omit cancelled checks. Share date and channel dimensions deliberately; do not join raw orders to completed orders as if both represented identical populations.
+## Demand denominators
 
-## Formatting and validation
+Weekday demand equals matching completed checks divided by the number of occurrences of that weekday in the selected period. Each hourly cell uses the same weekday denominator. Every calendar date counts because the restaurant is modeled as open daily, including dates with no matching items.
 
-- Parse order_date as a date, month as a month-start date or chronologically sorted YYYY-MM label, hour/weekday as whole numbers.
-- Format dollar fields as currency; quantity and order counts as integers.
-- Ratio fields ending `_pct` already contain percentage points. Divide by 100 for BI percentage formatting. A new measure contribution/net is already a fraction and needs no further division.
-- When changing date range, recompute operating-day denominators from a date calendar. Do not reuse the six-month `orders_per_day` values for a filtered period.
-- Before adding filters, reconcile total net sales to **$1,126,292.82** and completed orders to **14,860**. AOV should be **$75.79** and contribution margin **66.08%**.
-- Document whether each visual uses all recorded checks or completed checks. Do not label ingredient contribution as net profit.
+Service time means time to first main served for dine-in and time to ready for takeaway. These different service definitions are relevant when comparing channels.
 
-No native .pbix or Tableau workbook is included; the CSVs are the portable starting point.
+## Data grain and units
+
+`order_metrics.csv` contains one row per completed check; `line_metrics.csv` contains one row per completed item line. Summary tables are separate aggregations of the same underlying sales and are not additive across tables.
+
+Fact columns ending in `_cents` use integer cents. Summary currency fields use USD. Fields ending in `_pct` contain percentage points: 66.08 represents 66.08%. Ratios must be calculated from matching totals rather than averaged across groups.
+
+## Full-period reconciliation
+
+| Control total | Expected result |
+|---|---:|
+| Net sales | $1,126,292.82 |
+| Completed checks | 14,860 |
+| Average order value | $75.79 |
+| Ingredient contribution margin | 66.08% |
+
+The browser's headline sales card rounds to whole dollars for display; item tables and exports retain cents. No native Power BI or Tableau workbook is included.
+
+[Data dictionary](DATA_DICTIONARY.md) · [Calculation methodology](METHODOLOGY.md) · [Web application](WEBSITE.md)

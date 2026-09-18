@@ -1,6 +1,6 @@
 # Setup and reproduction
 
-Run commands from the extracted repository root, where README.md lives. Use Python 3.11+; the delivered analysis was run with the versions recorded in reports/validation.json. Internet access is needed only to install dependencies, not to generate or analyze data.
+Run commands from the repository root, where README.md lives. Use Python 3.11+; the delivered analysis was run with the versions recorded in reports/validation.json. Internet access is needed only to install dependencies, not to generate or analyze data.
 
 ## Python
 
@@ -55,7 +55,7 @@ mysql --local-infile=1 -u YOUR_MYSQL_USER -p
 SHOW GLOBAL VARIABLES LIKE 'local_infile';
 ```
 
-If OFF, a local administrator can enable it for this exercise with `SET GLOBAL local_infile=ON;`, or configure `local_infile=ON` under `[mysqld]` and restart their local instance. Only enable this with a trusted local server. The project does not change global server configuration itself.
+If OFF, a local administrator can enable it for local imports with `SET GLOBAL local_infile=ON;`, or configure `local_infile=ON` under `[mysqld]` and restart their local instance. Only enable this with a trusted local server. The project does not change global server configuration itself.
 
 3. Run in order at the MySQL prompt:
 
@@ -67,7 +67,7 @@ SOURCE sql/05_quality_checks.sql;
 SOURCE sql/04_analysis.sql;
 ```
 
-Schema creation intentionally fails if tables already exist; it does not drop or overwrite a database. Do not rerun imports into populated tables. For a second exercise, use a new database name consistently in the SQL files, or manage your disposable database yourself.
+Schema creation intentionally fails if tables already exist; it does not drop or overwrite a database. Do not rerun imports into populated tables. For a separate instance, use a new database name consistently in the SQL files, or manage your disposable database yourself.
 
 Expected raw row counts: servers **12**, menu_items **22**, orders **15,102**, order_items **74,590**. Every import should report zero warnings. LOCAL loading can turn some problems into warnings, so correct counts alone are insufficient; inspect each `SHOW WARNINGS` result and then run the verifier. Null operational fields in orders are blank CSV cells and are converted with `NULLIF`.
 
@@ -92,3 +92,14 @@ Password entry is prompted and is not written to the repository. Optional argume
 - Results differ: confirm completed-only filters, historical snapshot prices, round-half-up line discounts, and weighted ratio definitions.
 
 References: [MySQL loading data](https://dev.mysql.com/doc/refman/8.4/en/loading-tables.html), [LOCAL controls](https://dev.mysql.com/doc/refman/8.4/en/load-data-local-security.html).
+
+## Website preview
+
+The static application can be served from repository root:
+
+```bash
+python scripts/build_web_data.py
+python -m http.server 8765 --bind 127.0.0.1 --directory dist
+```
+
+The local preview is available at `http://127.0.0.1:8765/`. Web calculation checks run with `node tests/test_web.mjs` (Node.js 20+). The included browser data are ready to serve; rebuilding is needed after changing source CSVs. Baseline checks and written findings must also be reviewed when changing the dataset.

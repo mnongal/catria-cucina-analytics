@@ -33,7 +33,7 @@ The website includes:
 
 The dashboard runs in the browser using the included dataset. Visitors do not need Python, MySQL, or an account. Category selections calculate item sales and distinct checks containing those items; cancellation rates use period and channel only.
 
-[Website setup and deployment](docs/WEBSITE.md) · [Metric definitions and assumptions](docs/METHODOLOGY.md)
+[Web application](docs/WEBSITE.md) · [Metric definitions and assumptions](docs/METHODOLOGY.md)
 
 ## Dataset
 
@@ -108,39 +108,14 @@ The [analysis script](sql/04_analysis.sql) answers 13 business questions using j
 
 Matching Pandas outputs are available in [`data/processed`](data/processed).
 
-## Run locally
+## Project documentation
 
-### Website preview
-
-From the repository root, run:
-
-```bash
-python -m http.server 8765 --bind 127.0.0.1 --directory dist
-```
-
-Open `http://127.0.0.1:8765/` in a browser. The website data are already included. To rebuild them from the raw CSVs, run `python scripts/build_web_data.py` before starting the preview.
-
-### Python analysis
-
-Use Python 3.11 or newer:
-
-```bash
-python -m venv .venv
-# Activate the environment using the instructions in docs/SETUP.md.
-python -m pip install -r requirements.txt
-python scripts/analyze.py
-python -m unittest discover -s tests -v
-```
-
-Optional: `python scripts/generate_data.py` regenerates the source CSVs with seed `20260101`. Rerun the analysis afterward to refresh derived outputs.
-
-### MySQL
-
-Run the schema, import, views, quality checks, and analysis scripts in the order documented in [Setup](docs/SETUP.md). The project targets MySQL 8.4 and supports MySQL 8.0.16+.
-
-### GitHub Pages
-
-The included workflow builds the website data, verifies dashboard calculations, and deploys `dist/` when changes are pushed to `main`. Enable **Settings → Pages → GitHub Actions** in the repository. See [Deployment instructions](docs/WEBSITE.md) for first-time setup.
+- [Data dictionary](docs/DATA_DICTIONARY.md) — table structure, fields, and units.
+- [Methodology](docs/METHODOLOGY.md) — generation assumptions and financial definitions.
+- [Dashboard metrics](docs/DASHBOARD_GUIDE.md) — filter behavior and aggregation rules.
+- [Web application](docs/WEBSITE.md) — features and architecture.
+- [Setup and reproduction](docs/SETUP.md) — Python and MySQL execution.
+- [Deployment architecture](docs/PUBLISHING.md) — the GitHub Pages build pipeline.
 
 ## Repository structure
 

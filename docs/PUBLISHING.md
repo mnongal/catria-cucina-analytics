@@ -1,27 +1,25 @@
-# Upload the project
+# Deployment architecture
 
-**The package now includes an interactive website.** After uploading the files below, follow [Website publishing](WEBSITE.md) to enable GitHub Pages and run the included publishing workflow. Include the `.github` folder when uploading.
+The website is a static application hosted on GitHub Pages. Its deployment workflow is defined in `.github/workflows/deploy-pages.yml`.
 
-1. Extract the ZIP. Open the `restaurant-revenue-analytics` folder.
-2. Create an empty repository in your GitHub account, for example `restaurant-revenue-analytics`.
-3. Upload the **contents** of this folder, so README.md, data, sql, scripts and docs sit directly at repository root. Do not upload only the ZIP or nest the full project an extra level down.
-4. For a local Git workflow, run the following from this folder, substituting your actual account and repository URL:
+## Workflow
 
-```bash
-git init
-git add .
-git commit -m "Add restaurant analytics portfolio case study"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/restaurant-revenue-analytics.git
-git push -u origin main
-```
+| Stage | Responsibility |
+|---|---|
+| Checkout | Retrieve the repository revision |
+| Data preparation | Generate browser data and source downloads from the raw CSVs |
+| Validation | Run `tests/test_web.mjs` to verify totals, filters, and export contents |
+| Artifact | Package the `dist/` directory |
+| Deployment | Publish the validated artifact to the `github-pages` environment |
 
-This assumes the remote repository is empty. If it already contains work, integrate it with your normal Git workflow rather than replacing it.
+The workflow is triggered by pushes to `main` or by manual dispatch. The build job reads repository content; the deployment job has Pages and identity-token permissions. Authentication uses the built-in workflow token rather than a committed credential.
 
-Suggested repository description: **SQL and Python restaurant analytics case study with synthetic POS data, reproducible KPIs and a dashboard.**
+Only `dist/` is published as website content. SQL, Python source, and detailed documentation remain available in the repository. The build uses `GITHUB_REPOSITORY` to populate the dashboard's source-code link.
 
-Suggested topics: `sql`, `mysql`, `python`, `pandas`, `data-analysis`, `portfolio`, `synthetic-data`.
+## Reproducibility
 
-Check that the dashboard image and documentation links render after upload. Keep the synthetic-data and AI-assistance disclosures. You can upload first and work through the interview guide afterward; before describing any component as your own demonstrated skill, reproduce it and be ready to explain it.
+The web-data builder uses Python's standard library. Website calculation tests use Node.js and do not require third-party JavaScript packages. Relative asset paths support deployment beneath a repository-specific URL path.
 
-No account credentials are part of the package. Do not commit database passwords, environment files or a local virtual environment. The included .gitignore covers common local artifacts.
+The build checks the fixed dataset's baseline revenue. A replacement dataset requires corresponding updates to validation expectations and written findings; the application is not a general-purpose upload service.
+
+[Web application](WEBSITE.md) · [Analysis setup](SETUP.md)
